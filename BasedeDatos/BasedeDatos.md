@@ -1,0 +1,4 @@
+/gamemode hetero
+
+
+
