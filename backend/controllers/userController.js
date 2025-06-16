@@ -3,13 +3,13 @@ const bcrypt = require('bcryptjs');
 const { db } = require('../utils/firebase');
 
 const registerUser = async (req, res) => {
-  const { email, password, role = 'asistente', name } = req.body;
+  const { name, email, password, role = 'asistente' } = req.body;
 
   try {
-    const snapshot = await db.collection('users').where('email', '==', email).get();
-    if (!snapshot.empty) {
-      return res.status(400).json({ error: 'El usuario ya existe' });
-    }
+  //  const snapshot = await db.collection('users').where('email', '==', email).get();
+  //  if (!snapshot.empty) {
+  //    return res.status(400).json({ error: 'El usuario ya existe' });
+  //  }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -25,6 +25,7 @@ const registerUser = async (req, res) => {
 
     res.status(201).json({ id: docRef.id, message: 'Usuario registrado exitosamente' });
   } catch (error) {
+    console.error('Error al registrar usuario:', error);
     res.status(500).json({ error: 'Error al registrar usuario' });
   }
 };
