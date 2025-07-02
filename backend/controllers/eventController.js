@@ -54,4 +54,38 @@ const attendEvent = async (req, res) => {
   }
 };
 
-module.exports = { createEvent, getEvents, attendEvent };
+//------------Controllers de stat------------//
+
+const getEventStats = async (req, res) => {
+  try {
+    const snapshot = await db.collection('events').get();
+    const eventos = snapshot.docs.map(doc => doc.data());
+
+    const totalEventos = eventos.length;
+
+    const totalAsistentes = eventos.reduce((acc, e) => {
+      const attendees = e.attendees || [];
+      return acc + attendees.length;
+    }, 0);
+
+    const eventosPorMes = {};
+
+    eventos.forEach(evento => {
+      const fecha = new Date(evento.createdAt);
+      const mes = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}`;
+      if (!eventosPorMes[mes]) eventosPorMes[mes] = 0;
+      eventosPorMes[mes]++;
+    });
+
+    res.json({
+      totalEventos,
+      totalAsistentes,
+      eventosPorMes
+    });
+  } catch (error) {
+    console.error('Error al obtener estadísticas:', error);
+    res.status(500).json({ error: 'Error al obtener estadísticas' });
+  }
+};
+
+module.exports = { createEvent, getEvents, attendEvent, getEventStats };
