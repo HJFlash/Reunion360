@@ -1,0 +1,102 @@
+.dashboard-container {
+  padding: 2rem 3rem;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  min-height: 100vh;
+  color: white;
+  width: 100vw; /* usa todo el ancho de la ventana */
+  max-width: 100%; /* no limite de ancho */
+  box-sizing: border-box;
+}
+
+.dashboard-title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-cards {
+  display: grid; /* grid para controlar mejor layout */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* tarjetas responsivas */
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  width: 100%;
+}
+
+.card {
+  flex: 1 1 250px; /* un ancho base decente */
+  max-width: 320px; /* para que no crezca demasiado */
+  background: rgba(255, 255, 255, 0.15);
+  padding: 1.5rem;
+  border-radius: 16px;
+  color: white;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.card h2 {
+  font-size: 2.2rem;
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+.card p {
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.card.blue {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.card.green {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.card.purple {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.chart-section {
+  max-width: 1000px; /* limite ancho para el gráfico */
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.chart-section h2 {
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+  text-align: center;
+  text-shadow: 0 1px 5px rgba(0,0,0,0.3);
+}
+
+/* Responsive para pantallas chicas */
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1.5rem 2rem;
+  }
+
+  .dashboard-cards {
+    justify-content: center;
+  }
+
+  .card {
+    max-width: 100%;
+  }
+}
