@@ -1,0 +1,46 @@
+.create-event-page {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #fafafa;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.create-event-page h2 {
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #3b82f6;
+}
+
+.create-event-page input {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.create-event-page button {
+  width: 100%;
+  padding: 0.6rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.create-event-page button:hover {
+  background-color: #2563eb;
+}
+
+.create-event-page p {
+  margin-top: 1rem;
+  font-weight: bold;
+  text-align: center;
+}

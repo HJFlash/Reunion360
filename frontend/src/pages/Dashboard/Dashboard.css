@@ -18,17 +18,18 @@
 }
 
 .dashboard-cards {
-  display: grid; /* grid para controlar mejor layout */
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* tarjetas responsivas */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
-  margin-bottom: 3rem;
-  width: 100%;
+  margin: 0 auto 3rem auto; /* centrado horizontal */
+  max-width: 1000px; /* limita el ancho máximo del grid */
+  padding: 0 1rem;
 }
 
 .card {
   flex: 1 1 250px; /* un ancho base decente */
   max-width: 320px; /* para que no crezca demasiado */
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(236, 232, 232, 0.15);
   padding: 1.5rem;
   border-radius: 16px;
   color: white;
@@ -72,9 +73,11 @@
 }
 
 .chart-section {
-  max-width: 1000px; /* limite ancho para el gráfico */
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 1rem;
+  background-color: rgba(0, 0, 0, 0.1); /* opcional */
+  border-radius: 16px; /* opcional */
 }
 
 .chart-section h2 {
@@ -84,6 +87,23 @@
   text-align: center;
   text-shadow: 0 1px 5px rgba(0,0,0,0.3);
 }
+
+.go-create-btn {
+  padding: 0.6rem 1rem;
+  margin: 1rem 0;
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.go-create-btn:hover {
+  background-color: #059669;
+}
+
 
 /* Responsive para pantallas chicas */
 
