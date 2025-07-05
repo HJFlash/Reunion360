@@ -6,19 +6,82 @@ const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí podrías agregar validaciones y autenticación real
 
-    // Por ahora, asumimos login exitoso
-    navigate("/dashboard");
+    const emailInput = (e.target as HTMLFormElement).querySelector(
+      'input[type="email"]'
+    ) as HTMLInputElement;
+    const passwordInput = (e.target as HTMLFormElement).querySelector(
+      'input[type="password"]'
+    ) as HTMLInputElement;
+
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    try {
+      const response = await fetch("http://localhost:3000/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Guardar usuario y token
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        navigate("/dashboard");
+      } else {
+        alert(data.error || "Error al iniciar sesión.");
+      }
+    } catch (error) {
+      alert("Error de conexión con el servidor.");
+    }
   };
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí va la lógica de registro (puede ser un alert por ahora)
-    alert("Cuenta creada (simulado). Ahora inicia sesión.");
-    setIsLogin(true);
+
+    const emailInput = (e.target as HTMLFormElement).querySelector(
+      'input[type="email"]'
+    ) as HTMLInputElement;
+    const passwordInput = (e.target as HTMLFormElement).querySelector(
+      'input[type="password"]'
+    ) as HTMLInputElement;
+
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    try {
+      const response = await fetch("http://localhost:3000/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: "Nuevo Usuario",
+          email,
+          password,
+          role: "organizador" // o "asistente"
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Cuenta creada. Ahora inicia sesión.");
+        setIsLogin(true);
+      } else {
+        alert(data.error || "Error al registrarse.");
+      }
+    } catch (error) {
+      alert("Error de conexión con el servidor.");
+    }
   };
 
   return (
