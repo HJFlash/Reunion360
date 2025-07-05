@@ -1,11 +1,36 @@
 const { db } = require('../utils/firebase');
 
 const createEvent = async (req, res) => {
+  const { topic, start_time, duration } = req.body;
+
+  if (!topic || !start_time || !duration) {
+    return res.status(400).json({ error: 'Faltan datos obligatorios' });
+  }
+
   try {
-    const newEvent = req.body;
+    // En vez de crear reunión en Zoom, generamos un link simulado
+    const fakeJoinUrl = `https://reunion360.fake/join/${Date.now()}`;
+
+    const newEvent = {
+      topic,
+      start_time,
+      duration,
+      join_url: fakeJoinUrl,
+      start_url: 'https://reunion360.fake/start',
+      createdAt: new Date().toISOString(),
+      organizerId: req.user.uid,
+      attendees: []
+    };
+
     const docRef = await db.collection('events').add(newEvent);
-    res.status(201).json({ id: docRef.id });
+
+    res.status(201).json({
+      message: 'Evento simulado creado correctamente',
+      id: docRef.id,
+      join_url: fakeJoinUrl
+    });
   } catch (error) {
+    console.error('Error al crear evento:', error);
     res.status(500).json({ error: 'Error al crear evento' });
   }
 };
@@ -17,6 +42,25 @@ const getEvents = async (req, res) => {
     res.status(200).json(events);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener eventos' });
+  }
+};
+
+const getMyEvents = async (req, res) => {
+  try {
+    const snapshot = await db
+      .collection('events')
+      .where('organizerId', '==', req.user.uid)
+      .get();
+
+    const myEvents = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    res.status(200).json(myEvents);
+  } catch (error) {
+    console.error('Error al obtener mis eventos:', error);
+    res.status(500).json({ error: 'Error al obtener tus eventos' });
   }
 };
 
@@ -88,4 +132,10 @@ const getEventStats = async (req, res) => {
   }
 };
 
-module.exports = { createEvent, getEvents, attendEvent, getEventStats };
+module.exports = {
+  createEvent,
+  getEvents,
+  attendEvent,
+  getEventStats,
+  getMyEvents
+};
