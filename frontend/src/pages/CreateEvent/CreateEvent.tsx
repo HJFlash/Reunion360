@@ -17,7 +17,7 @@ const CreateEvent = () => {
     const start_time = new Date(`${date}T${time}:00`).toISOString();
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/events`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
