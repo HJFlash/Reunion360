@@ -15,7 +15,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    fetch("http://localhost:3000/api/events/my-events", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/events/my-events`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -27,7 +27,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    fetch("http://localhost:3000/api/users/me", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/users/me`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
@@ -52,7 +52,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    fetch("http://localhost:3000/api/events/stats", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/events/stats`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
