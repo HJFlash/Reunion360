@@ -3,11 +3,31 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "rec
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
 
+interface ChartDataItem {
+  name: string;
+  eventos: number;
+}
+
+interface MyEvent {
+  id: string;
+  topic: string;
+  start_time: string;
+  join_url: string;
+}
+
+interface User {
+  name: string;
+}
+
 const Dashboard = () => {
-  const [stats, setStats] = useState({ totalEventos: 0, totalUsuarios: 0, totalAsistencias: 0 });
-  const [chartData, setChartData] = useState([]);
-  const [user, setUser] = useState({ name: "" });
-  const [myEvents, setMyEvents] = useState([]);
+  const [stats, setStats] = useState({
+    totalEventos: 0,
+    totalUsuarios: 0,
+    totalAsistencias: 0,
+  });
+  const [chartData, setChartData] = useState<ChartDataItem[]>([]);
+  const [user, setUser] = useState<User>({ name: "" });
+  const [myEvents, setMyEvents] = useState<MyEvent[]>([]);
 
   const navigate = useNavigate();
 
@@ -16,11 +36,11 @@ const Dashboard = () => {
     if (!token) return;
 
     fetch(`${import.meta.env.VITE_API_URL}/api/events/my-events`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
-      .then(res => res.json())
-      .then(data => setMyEvents(data))
-      .catch(err => console.error("Error al obtener mis eventos:", err));
+      .then((res) => res.json())
+      .then((data: MyEvent[]) => setMyEvents(data))
+      .catch((err) => console.error("Error al obtener mis eventos:", err));
   };
 
   useEffect(() => {
@@ -30,9 +50,9 @@ const Dashboard = () => {
     fetch(`${import.meta.env.VITE_API_URL}/api/users/me`, {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then(res => res.json())
-      .then(user => setUser(user))
-      .catch(err => console.error("Error al obtener usuario:", err));
+      .then((res) => res.json())
+      .then((user: User) => setUser(user))
+      .catch((err) => console.error("Error al obtener usuario:", err));
   }, []);
 
   useEffect(() => {
@@ -55,22 +75,24 @@ const Dashboard = () => {
     fetch(`${import.meta.env.VITE_API_URL}/api/events/stats`, {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setStats({
           totalEventos: data.totalEventos,
           totalUsuarios: 0,
           totalAsistencias: data.totalAsistentes,
         });
 
-        const chart = Object.entries(data.eventosPorMes || {}).map(([mes, cantidad]) => ({
-          name: mes,
-          eventos: cantidad,
-        }));
+        const chart: ChartDataItem[] = Object.entries(data.eventosPorMes || {}).map(
+          ([mes, cantidad]) => ({
+            name: mes,
+            eventos: Number(cantidad), // asegúrate que es number
+          })
+        );
 
         setChartData(chart);
       })
-      .catch(err => console.error("Error al obtener estadísticas:", err));
+      .catch((err) => console.error("Error al obtener estadísticas:", err));
   }, []);
 
   return (
@@ -100,15 +122,12 @@ const Dashboard = () => {
       <div className="chart-section">
         <h2>Eventos por mes</h2>
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart 
-            data={chartData}
-            margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
-          >
+          <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
             <XAxis
               dataKey="name"
-              stroke="#ffffff" // eje X blanco
-              tick={{ fill: "#ffffff", fontSize: 12 }} // texto del eje
-              axisLine={{ stroke: "#ffffff" }} // línea del eje
+              stroke="#ffffff"
+              tick={{ fill: "#ffffff", fontSize: 12 }}
+              axisLine={{ stroke: "#ffffff" }}
               tickLine={{ stroke: "#ffffff" }}
             />
             <YAxis
@@ -144,7 +163,9 @@ const Dashboard = () => {
               <li key={event.id}>
                 <strong>{event.topic}</strong> <br />
                 Fecha: {new Date(event.start_time).toLocaleString()} <br />
-                <a href={event.join_url} target="_blank" rel="noopener noreferrer">Enlace</a>
+                <a href={event.join_url} target="_blank" rel="noopener noreferrer">
+                  Enlace
+                </a>
               </li>
             ))}
           </ul>
